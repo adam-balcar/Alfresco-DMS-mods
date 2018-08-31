@@ -1,0 +1,40 @@
+#how to start Alfresco
+# with docker (already intalled - well described here https://docs.docker.com/install/linux/docker-ce/centos/#install-docker-ce )
+# with Alfresco community 5.2 ( https://github.com/gui81/docker-alfresco )
+# how to correctly mount volumes - needed for content store and for tomcat configs  
+sudo docker run --name='container1'  -d -it -p 80:8080 --mount source=container1-content,target=/content --mount source=container1-alf_data,target=/alfresco/alf_data --mount source=container1-tomcat,target=/alfresco/tomcat gui81/alfresco
+
+#see the stats of your container - correct behaviour is CPU load high at startup going down in a few moments depending on resources.
+docker container stats
+--
+#another handy cmds for clean startup
+reboot
+sudo systemctl start docker
+sudo docker container prune
+
+#container restart after config changes
+docker container restart stanoviska
+
+#place to mod the document view options from the menu on the right side. 
+./var/lib/docker/volumes/container1-tomcat/_data/webapps/share/WEB-INF/classes/alfresco/share-documentlibrary-config.xml
+
+#place to mod top black header
+./var/lib/docker/volumes/container1-tomcat/_data/webapps/share/WEB-INF/classes/alfresco/site-webscripts/org/alfresco/share/header/share-header.get.js
+
+#place to mod home page landing
+./var/lib/docker/volumes/container1-tomcat/_data/webapps/share/site-index.jsp
+
+#place to do some translations or name mods
+./var/lib/docker/volumes/container1-tomcat/_data/webapps/share/WEB-INF/classes/alfresco/messages/slingshot_en.properties
+
+#place to mod the looksand hide elements	
+./var/lib/docker/volumes/container1-tomcat/_data/webapps/share/themes/lightTheme/presentation.css
+
+#place to do some translations or name mods of left menu list
+./var/lib/docker/volumes/container1-tomcat/_data/webapps/share/WEB-INF/classes/alfresco/site-webscripts/org/alfresco/components/documentlibrary/sharedfiles-tree.get_en.properties
+
+#place to do major configs, possibly set LDAP, SSO, etc.
+/var/lib/docker/volumes/stanoviska-tomcat/_data/shared/classes/alfresco-global.properties
+
+
+
